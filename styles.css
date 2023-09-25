@@ -1,14 +1,21 @@
 body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
 }
 
 .container {
   display: flex;
   flex-wrap: wrap;
   width: 600px;
-  height: 600px;
-  border: 1px solid black;
 }
 
 .square {
-  border: 1px solid black;
+  flex-basis: calc(100% / 16); /*  width based on the number of columns (16) */
+  padding-top: calc(100% / 16); /* height based on the number of rows (16) */
+  background-color: #ccc;
+  border: 1px solid #000;
+  box-sizing: border-box;
 }
