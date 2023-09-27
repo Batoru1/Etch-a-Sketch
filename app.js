@@ -28,3 +28,7 @@ function getRandomColor() {
   }
   return color;
 }
+
+// const changeGrid = prompt('Enter grid size', '1-64x1-64');
+
+// if (changeGrid )
