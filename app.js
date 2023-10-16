@@ -1,6 +1,13 @@
 const container = document.querySelector('.container');
+const sliderInput = document.getElementById('slider-input');
+const sliderValue = document.getElementById('slider-value');
 
 function createGrid(rows, columns) {
+  // Clear the container by removing all child elements
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
+
   for (let i = 0; i < rows * columns; i++) {
     const square = document.createElement('div');
     square.classList.add('square');
@@ -8,9 +15,12 @@ function createGrid(rows, columns) {
   }
 }
 
+// Event listener to update the slider value display and create the grid
+sliderInput.addEventListener('input');
+
 createGrid(16, 16);
 
-const squares = document.querySelectorAll('.square');
+let squares = document.querySelectorAll('.square');
 
 squares.forEach(function (square) {
   square.addEventListener('mouseenter', function () {
