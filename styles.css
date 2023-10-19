@@ -8,19 +8,14 @@ body {
 
 .container {
   width: 600px;
-  height: 600px;
   border: 1px solid #000;
-  display: grid;
-  grid-template-columns: repeat(16, 1fr);
-  grid-template-rows: repeat(16, 1fr);
-  /* grid-template-columns: repeat(auto-fill, minmax(1fr, 1fr));
-  gap: 1px; */
+  /* these three lines helped me to create a functional grid layout */
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .square {
-  /*flex-basis: calc(100% / 16); /*  width based on the number of columns (16) */
-  /* padding-top: calc(100% / 16); /* height based on the number of rows (16) */
-
   background-color: white;
   border: 1px solid #000;
   width: 100%;

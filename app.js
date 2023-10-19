@@ -10,7 +10,6 @@ function createGrid(rows, columns) {
   // Calculate the square size based on the slider value and container width
   const containerWidth = container.clientWidth;
   const squareSize = containerWidth / columns;
-
   // Create and append the grid squares with adjusted size
   for (let i = 0; i < rows * columns; i++) {
     const square = document.createElement('div');
@@ -23,14 +22,13 @@ function createGrid(rows, columns) {
 
 // Event listener to update the slider value display and create the grid
 sliderInput.addEventListener('input', function () {
-  sliderValue.textContent = sliderInput.value;
   createGrid(sliderInput.value, sliderInput.value); // Create the grid based on the slider value
+  sliderValue.textContent = `${sliderInput.value}x${sliderInput.value}`; //to make slider value display num x num instead of just num
 });
 
 createGrid(1, 1);
 
 let squares = document.querySelectorAll('.square');
-
 squares.forEach(function (square) {
   square.addEventListener('mouseenter', function () {
     // Change the background color to a random color
