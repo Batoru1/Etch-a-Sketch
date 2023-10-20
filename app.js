@@ -17,9 +17,13 @@ function createGrid(rows, columns) {
     square.style.width = squareSize + 'px';
     square.style.height = squareSize + 'px';
     container.appendChild(square);
+    // Add event listener for the new square
+    square.addEventListener('mouseenter', function () {
+      // Change the background color to a random color
+      square.style.backgroundColor = getRandomColor();
+    });
   }
 }
-
 // Event listener to update the slider value display and create the grid
 sliderInput.addEventListener('input', function () {
   createGrid(sliderInput.value, sliderInput.value); // Create the grid based on the slider value
@@ -28,13 +32,13 @@ sliderInput.addEventListener('input', function () {
 
 createGrid(1, 1);
 
-let squares = document.querySelectorAll('.square');
-squares.forEach(function (square) {
-  square.addEventListener('mouseenter', function () {
-    // Change the background color to a random color
-    square.style.backgroundColor = getRandomColor();
-  });
-});
+// let squares = document.querySelectorAll('.square');
+// squares.forEach(function (square) {
+//   square.addEventListener('mouseenter', function () {
+//     // Change the background color to a random color
+//     square.style.backgroundColor = getRandomColor();
+//   });
+// });
 
 // Function to generate a random color in hex format (#RRGGBB)
 function getRandomColor() {
