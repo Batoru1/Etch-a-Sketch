@@ -32,13 +32,13 @@ sliderInput.addEventListener('input', function () {
 
 createGrid(1, 1);
 
-// let squares = document.querySelectorAll('.square');
-// squares.forEach(function (square) {
-//   square.addEventListener('mouseenter', function () {
-//     // Change the background color to a random color
-//     square.style.backgroundColor = getRandomColor();
-//   });
-// });
+let squares = document.querySelectorAll('.square');
+squares.forEach(function (square) {
+  square.addEventListener('mouseenter', function () {
+    // Change the background color to a random color
+    square.style.backgroundColor = getRandomColor();
+  });
+});
 
 // Function to generate a random color in hex format (#RRGGBB)
 function getRandomColor() {
@@ -50,6 +50,32 @@ function getRandomColor() {
   return color;
 }
 
-// const changeGrid = prompt('Enter grid size', '1-64x1-64');
+function changeColorOnHover() {
+  //Change the background color to random color on hover
+  this.style.backgroundColor = getRandomColor();
+}
 
-// if (changeGrid )
+function changeColorOnClick() {
+  //Change the background color to a random color on click
+  this.style.backgroundColor = getRandomColor();
+}
+
+// Event listener to change the behavior when the randomColorBtn is clicked
+document
+  .getElementById('randomColorBtn')
+  .addEventListener('click', function () {
+    // Remove the "click" event listener and add the "mouseenter" event listener
+    squares.forEach(function (square) {
+      square.removeEventListener('click', changeColorOnClick);
+      square.addEventListener('mouseenter', changeColorOnHover);
+    });
+  });
+
+// Event listener to change the behavior when the clickColorBtn is clicked
+document.getElementById('clickColorBtn').addEventListener('click', function () {
+  // Remove the "mouseenter" event listener and add the "click" event listener
+  squares.forEach(function (square) {
+    square.removeEventListener('mouseenter', changeColorOnHover);
+    square.addEventListener('click', changeColorOnClick);
+  });
+});
