@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
       container.appendChild(square);
       squares.push(square); // Add the square to the array
       // Add event listeners for the new square
-      square.addEventListener('mouseenter', changeColorOnHover);
+      square.addEventListener('mouseenter', function () {}); //so that 'nothing happens initially
       square.addEventListener('click', changeColorOnClick);
     }
   }
