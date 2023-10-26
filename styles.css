@@ -6,12 +6,17 @@ body {
   margin: 0;
 }
 
+/*to make container stay the same size even with squares in it even when resizing the browser*/
+.wraper {
+  width: 600px;
+  height: 600px;
+}
+
 .container {
   width: 600px;
   border: 1px solid #000;
-  /* these three lines helped me to create a functional grid layout */
+  /* these two lines helped me to create a functional grid layout */
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
 }
 
