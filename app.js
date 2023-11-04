@@ -63,31 +63,34 @@ document.addEventListener('DOMContentLoaded', function () {
     this.style.backgroundColor = getRandomColor();
   }
 
+  let interactions = 0;
+  const maxInteractions = 10; // Adjust the number of interactions required
+
   function changeColorOnClick() {
-    // Change the background color to a random color on click
-    this.style.backgroundColor = getRandomColor();
+    if (interactions < maxInteractions) {
+      // Calculate the darkening factor
+      const darkeningFactor = (interactions / maxInteractions) * 90 + 10;
+
+      // Change the background color to a darker shade
+      this.style.backgroundColor = `hsl(0, 0%, ${darkeningFactor}%)`;
+
+      interactions++; // Increment the interactions counter
+    } else {
+      interactions = 0; // Reset the interactions counter to 0
+    }
   }
+
+  // function changeColorOnClick() {
+  //   // Change the background color to a random color on click
+  //   this.style.backgroundColor = getRandomColor();
+  // }
 
   // Event listener to change the behavior when the hoverColorBtn is clicked
   document
     .getElementById('hoverColorBtn')
     .addEventListener('click', function () {
       isRainbowMode = !isRainbowMode; // Toggle between rainbow and black mode
-
-      // 1Change both event listeners for squares
-      // squares.forEach(function (square) {
-      //   square.removeEventListener('click', changeColorOnClick);
-      //   square.removeEventListener('mouseenter', changeColorOnHover);
-      //   square.addEventListener('mouseenter', changeColorOnHover);
-      //   square.style.cursor = 'pointer'; // Add pointer cursor on hover
-      // });
-      //2change both event listeners for squares
-      // if (isRainbowMode) {
-      //   isRainbowMode = false; //switch to black mode
-      // } else {
-      //   isRainbowMode = true; //switch to rainbow mode
-      // }
-      // 3Change event listeners for squares
+      // Change event listeners for squares
       squares.forEach(function (square) {
         square.removeEventListener('click', changeColorOnClick);
         square.removeEventListener('mouseenter', changeColorOnHover);
@@ -106,22 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .getElementById('clickColorBtn')
     .addEventListener('click', function () {
       isRainbowMode = !isRainbowMode; // Toggle between rainbow and black mode
-
-      //1 Change both event listeners for squares
-      // squares.forEach(function (square) {
-      //   square.removeEventListener('mouseenter', changeColorOnHover);
-      //   square.removeEventListener('click', changeColorOnClick);
-      //   square.addEventListener('click', changeColorOnClick);
-      //   square.style.cursor = 'pointer'; // Add pointer cursor
-      // });
-      //2change both event listners for squares
-      // if (isRainbowMode) {
-      //   isRainbowMode = false; // Switch to black mode
-      // } else {
-      //   isRainbowMode = true; // Switch to rainbow mode
-      // }
-
-      // 3Change event listeners for squares
+      // Change event listeners for squares
       squares.forEach(function (square) {
         square.removeEventListener('mouseenter', changeColorOnHover);
         square.removeEventListener('click', changeColorOnClick);
