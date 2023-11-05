@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const sliderInput = document.getElementById('slider-input');
   const sliderValue = document.getElementById('slider-value');
   let squares = [];
-  let isRainbowMode = false; //Flag to track rainow mode
+  let isRainbowMode = false; // Flag to track rainbow mode
+  let isDarkenerMode = false; // Flag to track darkener mode
 
   function createGrid(rows, columns) {
     // Remove existing square elements and their event listeners
@@ -13,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function () {
         changeColorOnHover
       );
       container.firstChild.removeEventListener('click', changeColorOnClick);
+      if (isDarkenerMode) {
+        container.firstChild.removeEventListener('click', darkenSquareOnClick);
+      }
       container.removeChild(container.firstChild);
     }
 
@@ -31,8 +35,11 @@ document.addEventListener('DOMContentLoaded', function () {
       container.appendChild(square);
       squares.push(square); // Add the square to the array
       // Add event listeners for the new square
-      square.addEventListener('mouseenter', function () {}); //so that 'nothing happens initially
+      square.addEventListener('mouseenter', function () {}); // So that nothing happens initially
       square.addEventListener('click', changeColorOnClick);
+      if (isDarkenerMode) {
+        square.addEventListener('click', darkenSquareOnClick);
+      }
     }
   }
 
@@ -54,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       return color;
     } else {
-      return 'black'; //return black in black mode
+      return 'black'; // Return black in black mode
     }
   }
 
@@ -63,9 +70,29 @@ document.addEventListener('DOMContentLoaded', function () {
     this.style.backgroundColor = getRandomColor();
   }
 
+  let interactions = 0;
+  const maxInteractions = 10; // Adjust the number of interactions required
+
   function changeColorOnClick() {
     // Change the background color to a random color on click
     this.style.backgroundColor = getRandomColor();
+  }
+
+  function darkenSquareOnClick() {
+    if (interactions < maxInteractions) {
+      // Calculate the darkening factor
+      const currentColor = getComputedStyle(this).backgroundColor;
+      const currentColorRGB = currentColor.match(/\d+/g);
+      const newColorRGB = currentColorRGB.map((value) =>
+        Math.max(0, value - 25)
+      ); // Darken the color
+
+      this.style.backgroundColor = `rgb(${newColorRGB[0]}, ${newColorRGB[1]}, ${newColorRGB[2]})`;
+
+      interactions++; // Increment the interactions counter
+    } else {
+      interactions = 0; // Reset the interactions counter to 0
+    }
   }
 
   // Event listener to change the behavior when the hoverColorBtn is clicked
@@ -73,21 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .getElementById('hoverColorBtn')
     .addEventListener('click', function () {
       isRainbowMode = !isRainbowMode; // Toggle between rainbow and black mode
-
-      // 1Change both event listeners for squares
-      // squares.forEach(function (square) {
-      //   square.removeEventListener('click', changeColorOnClick);
-      //   square.removeEventListener('mouseenter', changeColorOnHover);
-      //   square.addEventListener('mouseenter', changeColorOnHover);
-      //   square.style.cursor = 'pointer'; // Add pointer cursor on hover
-      // });
-      //2change both event listeners for squares
-      // if (isRainbowMode) {
-      //   isRainbowMode = false; //switch to black mode
-      // } else {
-      //   isRainbowMode = true; //switch to rainbow mode
-      // }
-      // 3Change event listeners for squares
+      // Change event listeners for squares
       squares.forEach(function (square) {
         square.removeEventListener('click', changeColorOnClick);
         square.removeEventListener('mouseenter', changeColorOnHover);
@@ -106,22 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .getElementById('clickColorBtn')
     .addEventListener('click', function () {
       isRainbowMode = !isRainbowMode; // Toggle between rainbow and black mode
-
-      //1 Change both event listeners for squares
-      // squares.forEach(function (square) {
-      //   square.removeEventListener('mouseenter', changeColorOnHover);
-      //   square.removeEventListener('click', changeColorOnClick);
-      //   square.addEventListener('click', changeColorOnClick);
-      //   square.style.cursor = 'pointer'; // Add pointer cursor
-      // });
-      //2change both event listners for squares
-      // if (isRainbowMode) {
-      //   isRainbowMode = false; // Switch to black mode
-      // } else {
-      //   isRainbowMode = true; // Switch to rainbow mode
-      // }
-
-      // 3Change event listeners for squares
+      // Change event listeners for squares
       squares.forEach(function (square) {
         square.removeEventListener('mouseenter', changeColorOnHover);
         square.removeEventListener('click', changeColorOnClick);
@@ -135,13 +133,28 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-  //event listener for the black btn
-  document.getElementById('blackBtn').addEventListener('click', function () {
-    isRainbowMode = false; //set to black mode
+  // Event listener to toggle darkener mode when the darker button is clicked
+  document.getElementById('darker').addEventListener('click', function () {
+    isDarkenerMode = !isDarkenerMode; // Toggle darkener mode
+    // Change event listeners for squares
+    squares.forEach(function (square) {
+      if (isDarkenerMode) {
+        square.addEventListener('click', darkenSquareOnClick);
+        square.style.cursor = 'pointer'; // Add pointer cursor for darkening
+      } else {
+        square.removeEventListener('click', darkenSquareOnClick);
+        square.style.cursor = 'default'; // Remove pointer cursor
+      }
+    });
   });
 
-  //event listener for the rainbow btn
+  // Event listener for the black button
+  document.getElementById('blackBtn').addEventListener('click', function () {
+    isRainbowMode = false; // Set to black mode
+  });
+
+  // Event listener for the rainbow button
   document.getElementById('rainbowBtn').addEventListener('click', function () {
-    isRainbowMode = true; //set to rainbow mode
+    isRainbowMode = true; // Set to rainbow mode
   });
 });
