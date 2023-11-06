@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const sliderValue = document.getElementById('slider-value');
   let squares = [];
   let isRainbowMode = false; // Flag to track rainbow mode
-  let isDarkenerMode = false; // Flag to track darkener mode
+  let isDarkenerMode = false; // Flag to track the darkener mode
 
   function createGrid(rows, columns) {
     // Remove existing square elements and their event listeners
@@ -14,9 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
         changeColorOnHover
       );
       container.firstChild.removeEventListener('click', changeColorOnClick);
-      if (isDarkenerMode) {
-        container.firstChild.removeEventListener('click', darkenSquareOnClick);
-      }
+      container.firstChild.removeEventListener('click', darkenSquare);
       container.removeChild(container.firstChild);
     }
 
@@ -37,9 +35,6 @@ document.addEventListener('DOMContentLoaded', function () {
       // Add event listeners for the new square
       square.addEventListener('mouseenter', function () {}); // So that nothing happens initially
       square.addEventListener('click', changeColorOnClick);
-      if (isDarkenerMode) {
-        square.addEventListener('click', darkenSquareOnClick);
-      }
     }
   }
 
@@ -74,26 +69,69 @@ document.addEventListener('DOMContentLoaded', function () {
   const maxInteractions = 10; // Adjust the number of interactions required
 
   function changeColorOnClick() {
-    // Change the background color to a random color on click
-    this.style.backgroundColor = getRandomColor();
-  }
-
-  function darkenSquareOnClick() {
     if (interactions < maxInteractions) {
       // Calculate the darkening factor
-      const currentColor = getComputedStyle(this).backgroundColor;
-      const currentColorRGB = currentColor.match(/\d+/g);
-      const newColorRGB = currentColorRGB.map((value) =>
-        Math.max(0, value - 25)
-      ); // Darken the color
+      const darkeningFactor = (interactions / maxInteractions) * 90 + 10;
 
-      this.style.backgroundColor = `rgb(${newColorRGB[0]}, ${newColorRGB[1]}, ${newColorRGB[2]})`;
+      // Change the background color to a darker shade
+      this.style.backgroundColor = `hsl(0, 0%, ${darkeningFactor}%)`;
 
       interactions++; // Increment the interactions counter
     } else {
       interactions = 0; // Reset the interactions counter to 0
     }
   }
+
+  function darkenSquare() {
+    if (interactions < maxInteractions) {
+      if (this.style.backgroundColor === 'rgba(0, 0, 0, 0.1)') {
+        // If the square is already completely black, do nothing
+        return;
+      }
+
+      let currentColor = this.style.backgroundColor;
+
+      if (currentColor === 'rgba(0, 0, 0, 0)' && isRainbowMode) {
+        // If the square is empty and it's in rainbow mode, set a random color
+        currentColor = getRandomColor();
+      }
+
+      // Convert the color to RGB values
+      const rgbValues = currentColor.match(/\d+/g);
+
+      // Decrease the color by 10%
+      const darkerColor = `rgba(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]}, 0.9)`;
+
+      this.style.backgroundColor = darkerColor;
+      interactions++; // Increment the interactions counter
+    }
+  }
+
+  // Event listener for the darker button
+  document.getElementById('darker').addEventListener('click', function () {
+    isDarkenerMode = !isDarkenerMode; // Toggle the darkener mode
+
+    if (isDarkenerMode) {
+      // Change event listeners for squares when darkener mode is activated
+      squares.forEach(function (square) {
+        square.removeEventListener('mouseenter', changeColorOnHover);
+        square.removeEventListener('click', changeColorOnClick);
+        square.addEventListener('click', darkenSquare);
+        square.style.cursor = 'pointer';
+      });
+    } else {
+      // Restore the default behavior when darkener mode is deactivated
+      squares.forEach(function (square) {
+        square.removeEventListener('click', darkenSquare);
+        square.style.cursor = 'default';
+        if (isRainbowMode) {
+          square.addEventListener('mouseenter', changeColorOnHover);
+        } else {
+          square.addEventListener('click', changeColorOnClick);
+        }
+      });
+    }
+  });
 
   // Event listener to change the behavior when the hoverColorBtn is clicked
   document
@@ -102,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
       isRainbowMode = !isRainbowMode; // Toggle between rainbow and black mode
       // Change event listeners for squares
       squares.forEach(function (square) {
-        square.removeEventListener('click', changeColorOnClick);
+        square.removeEventListener('click', darkenSquare);
         square.removeEventListener('mouseenter', changeColorOnHover);
         if (isRainbowMode) {
           square.addEventListener('mouseenter', changeColorOnHover);
@@ -121,8 +159,8 @@ document.addEventListener('DOMContentLoaded', function () {
       isRainbowMode = !isRainbowMode; // Toggle between rainbow and black mode
       // Change event listeners for squares
       squares.forEach(function (square) {
+        square.removeEventListener('click', darkenSquare);
         square.removeEventListener('mouseenter', changeColorOnHover);
-        square.removeEventListener('click', changeColorOnClick);
         if (isRainbowMode) {
           square.addEventListener('mouseenter', changeColorOnHover);
           square.style.cursor = 'pointer'; // Add pointer cursor on hover
@@ -132,21 +170,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       });
     });
-
-  // Event listener to toggle darkener mode when the darker button is clicked
-  document.getElementById('darker').addEventListener('click', function () {
-    isDarkenerMode = !isDarkenerMode; // Toggle darkener mode
-    // Change event listeners for squares
-    squares.forEach(function (square) {
-      if (isDarkenerMode) {
-        square.addEventListener('click', darkenSquareOnClick);
-        square.style.cursor = 'pointer'; // Add pointer cursor for darkening
-      } else {
-        square.removeEventListener('click', darkenSquareOnClick);
-        square.style.cursor = 'default'; // Remove pointer cursor
-      }
-    });
-  });
 
   // Event listener for the black button
   document.getElementById('blackBtn').addEventListener('click', function () {
