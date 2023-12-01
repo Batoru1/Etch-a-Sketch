@@ -133,4 +133,6 @@ document.addEventListener('DOMContentLoaded', function () {
     isRainbowMode = true; //set to rainbow mode
   });
   console.log('hello world');
+  console.log('hello world');
+  console.log('hello world');
 });
