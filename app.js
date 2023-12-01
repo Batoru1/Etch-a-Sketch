@@ -132,4 +132,5 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('rainbowBtn').addEventListener('click', function () {
     isRainbowMode = true; //set to rainbow mode
   });
+  console.log('hello world');
 });
